@@ -1,0 +1,12 @@
+module CMuPDF {
+    // MuPDF 核心頭檔案
+    header "mupdf/fitz.h"
+    header "mupdf/pdf.h"
+    header "mupdf/html.h"
+    header "mupdf/memento.h"
+    header "mupdf/ucdn.h"
+
+
+
+    export *
+}
