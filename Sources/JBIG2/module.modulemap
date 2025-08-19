@@ -1,0 +1,12 @@
+//
+//  module.modulemap
+//  MuPDF
+//
+//  Created by Grady Zhuo on 2025/8/19.
+//
+
+module JBIG2 [system] {
+    header "jbig2.h"
+    link "jbig2dec"
+    export *
+}

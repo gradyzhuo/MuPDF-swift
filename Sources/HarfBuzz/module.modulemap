@@ -1,0 +1,13 @@
+//
+//  module.modulemap
+//  MuPDF
+//
+//  Created by Grady Zhuo on 2025/8/19.
+//
+
+module HarfBuzz [system] {
+    header "hb.h"
+    header "hb-ft.h" // 如果需要与 FreeType 集成
+    link "harfbuzz"
+    export *
+}

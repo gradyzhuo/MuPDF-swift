@@ -1,0 +1,13 @@
+//
+//  module.modulemap
+//  MuPDF
+//
+//  Created by Grady Zhuo on 2025/8/19.
+//
+
+module FreeType [system] {
+    header "ft2build.h"
+    header "freetype/freetype.h"
+    link "freetype"
+    export *
+}
