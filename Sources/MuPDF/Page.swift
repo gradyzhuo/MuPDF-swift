@@ -6,7 +6,14 @@
 //
 import CMuPDF
 
-public struct Page: Sendable {
+extension fz_page: @retroactive @unchecked Sendable {}
+
+public struct Page: FZConvertible {
     internal typealias UnderlyingType = fz_page
     
+    let underlyingInstance: fz_page
+    
+    public init() {
+        self.underlyingInstance = .init()
+    }
 }

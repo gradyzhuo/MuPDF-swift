@@ -6,7 +6,14 @@ module CMuPDF {
     header "mupdf/memento.h"
     header "mupdf/ucdn.h"
 
+    export *
+}
 
-
+module CExtract {
+    header "extract/extract.h"
+    header "extract/alloc.h"
+    header "extract/buffer.h"
+    
+    link "extract"
     export *
 }

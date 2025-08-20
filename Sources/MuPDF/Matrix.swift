@@ -7,7 +7,12 @@
 
 import CMuPDF
 
-public struct Matrix: Sendable {
+public struct Matrix: FZConvertible {
     internal typealias UnderlyingType = fz_matrix
+        
+    let underlyingInstance: fz_matrix
     
+    public init(){
+        self.underlyingInstance = .init()
+    }
 }

@@ -1,0 +1,73 @@
+module BrotliCommon [system] {
+    header "brotli/port.h"
+    header "brotli/shared_dictionary.h"
+    header "brotli/types.h"
+    
+    link "brotlicommon"
+    export *
+}
+
+module BrotliDecode [system] {
+    header "brotli/decode.h"
+    
+    link "brotlidec"
+    export *
+}
+
+module BrotliEncode [system] {
+    header "brotli/encode.h"
+    
+    link "brotlienc"
+    export *
+}
+
+module FreeType [system] {
+    header "ft2build.h"
+    header "freetype/freetype.h"
+    link "freetype"
+    export *
+}
+
+module Gumbo [system] {
+    header "gumbo.h"
+    link "gumbo"
+    export *
+}
+
+module HarfBuzz [system] {
+    header "hb.h"
+    header "hb-ft.h" // 如果需要与 FreeType 集成
+    link "harfbuzz"
+    export *
+}
+
+module JBIG2 [system] {
+    header "jbig2.h"
+    link "jbig2dec"
+    export *
+}
+
+module JPEG [system] {
+    header "jpeglib.h"
+    header "jinclude.h"
+    link "jpeg"
+    export *
+}
+
+module LCMS2 [system] {
+    header "lcms2.h"
+    link "lcms2"
+    export *
+}
+
+module MuJS [system] {
+    header "mujs.h"
+    link "mujs"
+    export *
+}
+
+module OpenJPEG [system] {
+    header "openjpeg.h"
+    link "openjp2"
+    export *
+}
