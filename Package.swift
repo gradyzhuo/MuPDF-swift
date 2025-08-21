@@ -4,23 +4,31 @@
 import PackageDescription
 
 let package = Package(
-    name: "MuPDF",
-    defaultLocalization: "en",
+    name: "MuPDF-Swift",
     platforms: [
         .macOS(.v15)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "MuPDF",
-            targets: ["MuPDF"]
+            name: "Fitz",
+            targets: ["Fitz"]
         )
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "MuPDF",
+            name: "Core",
+            sources: [
+                "source"
+            ],
+            cSettings:[
+                .headerSearchPath("include")
+            ]
+        ),
+        .target(
+            name: "Fitz",
             dependencies: [
                 "CMuPDF"
             ]
@@ -28,6 +36,7 @@ let package = Package(
         .target(
             name: "CMuPDF",
             dependencies: [
+                "Core",
                 "FreeType",
                 "HarfBuzz",
                 "Gumbo",
@@ -40,9 +49,13 @@ let package = Package(
                 "BrotliEncode",
                 "BrotliDecode"
             ],
+            exclude: [
+                "source/html/css-properties.gperf",
+                "source/pdf/js/util.js"
+            ],
             sources: [
                 "source",
-                "resources/fonts",
+                "resources/fonts"
             ],
             cSettings: [
                 .headerSearchPath("include"), // MuPDF 核心頭檔案
@@ -69,7 +82,7 @@ let package = Package(
         
         .testTarget(
             name: "MuPDFTests",
-            dependencies: ["MuPDF"]
+            dependencies: ["Fitz"]
         ),
     ] + thirdpartyTargets()
 )
