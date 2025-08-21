@@ -7,6 +7,6 @@
 
 #include <setjmp.h>
 
-int wrap_sigsetjmp(jmp_buf env, int savesigs) {
+int wrap_sigsetjmp(sigjmp_buf env, int savesigs) {
     return sigsetjmp(env, savesigs);
 }
