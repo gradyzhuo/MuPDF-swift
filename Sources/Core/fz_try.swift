@@ -28,4 +28,28 @@ func fz_try(context: UnsafeMutablePointer<fz_context>, handler: () throws -> Voi
     try handler()
 }
 
+func fz_always(context: UnsafeMutablePointer<fz_context>, handler: () throws -> Void) throws {
+
+    guard fz_do_always(context) > 0 else {
+        return
+    }
+    
+    try handler()
+}
+
+func fz_catch(context: UnsafeMutablePointer<fz_context>, handler: (_ errorCode: Int32, _ errorNo: Int32, _ message: UnsafePointer<CChar>?) throws -> Void) throws {
+
+    guard fz_do_catch(context) > 0 else {
+        return
+    }
+    
+    let errorCode = fz_caught(context)
+    let errorNo = fz_caught_errno(context)
+    let errorMessage = fz_caught_message(context).map{
+        String(cString: $0)
+    }
+    
+    try handler(errorCode, errorNo, errorMessage)
+}
+
     
