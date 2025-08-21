@@ -1,0 +1,5 @@
+module Core {
+    header "include/setjmp_wrapper.h"
+    
+    export *
+}

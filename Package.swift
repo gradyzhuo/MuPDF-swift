@@ -20,6 +20,19 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Core",
+            dependencies: [
+                "CCore",
+                "CMuPDF"
+            ]
+        ),
+        .target(
+            name: "Fitz",
+            dependencies: [
+                "Core"
+            ]
+        ),
+        .target(
+            name: "CCore",
             sources: [
                 "source"
             ],
@@ -28,15 +41,8 @@ let package = Package(
             ]
         ),
         .target(
-            name: "Fitz",
-            dependencies: [
-                "CMuPDF"
-            ]
-        ),
-        .target(
             name: "CMuPDF",
             dependencies: [
-                "Core",
                 "FreeType",
                 "HarfBuzz",
                 "Gumbo",
