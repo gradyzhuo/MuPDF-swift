@@ -5,8 +5,8 @@
 //  Created by Grady Zhuo on 2025/8/20.
 //
 
-internal protocol FZConvertible: Sendable {
+internal protocol FZConvertible: ~Copyable {
     associatedtype UnderlyingType
     
-    var underlyingInstance: UnderlyingType { get }
+    var underlyingPointer: UnsafeMutablePointer<UnderlyingType> { get }
 }

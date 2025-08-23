@@ -9,6 +9,7 @@ import CMuPDF
 import Accelerate
 
 
+
 /**
  Matrix() - all zeros
  Matrix(a, b, c, d, e, f)
@@ -25,10 +26,13 @@ import Accelerate
 public struct Matrix: FZConvertible {
     internal typealias UnderlyingType = fz_matrix
         
-    internal private(set) var underlyingInstance: fz_matrix
+    internal private(set) var underlyingPointer: UnsafeMutablePointer<fz_matrix>
     
     public init(a: Float, b: Float, c: Float, d: Float, e: Float, f: Float){
-        self.underlyingInstance = .init(a: a, b: b, c: c, d: d, e: e, f: f)
+        self.underlyingPointer = .with{
+            .init(a: a, b: b, c: c, d: d, e: e, f: f)
+        }
+        self.underlyingPointer = .with(pointee: .init(a: a, b: b, c: c, d: d, e: e, f: f))
     }
     
     public init(){
