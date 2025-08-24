@@ -5,6 +5,7 @@
 //  Created by Grady Zhuo on 2025/8/20.
 //
 
+import Core
 import CMuPDF
 import Accelerate
 
@@ -24,15 +25,12 @@ import Accelerate
  not None.
  */
 public struct Matrix: FZConvertible {
-    internal typealias UnderlyingType = fz_matrix
+    package typealias UnderlyingType = fz_matrix
         
-    internal private(set) var underlyingPointer: UnsafeMutablePointer<fz_matrix>
+    package private(set) var pointee: fz_matrix
     
     public init(a: Float, b: Float, c: Float, d: Float, e: Float, f: Float){
-        self.underlyingPointer = .with{
-            .init(a: a, b: b, c: c, d: d, e: e, f: f)
-        }
-        self.underlyingPointer = .with(pointee: .init(a: a, b: b, c: c, d: d, e: e, f: f))
+        self.pointee = .init(a: a, b: b, c: c, d: d, e: e, f: f)
     }
     
     public init(){

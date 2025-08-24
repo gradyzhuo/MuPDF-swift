@@ -6,25 +6,37 @@
 //
 import CMuPDF
 import Core
+import System
 
 extension fz_document: @retroactive @unchecked Sendable {}
 
-public struct Document: FZConvertible, ~Copyable {
-    internal typealias UnderlyingType = fz_document
+public struct Document: FZConvertible {
+    package typealias UnderlyingType = fz_document
     
-    let context: Context
-    let underlyingPointer: UnsafeMutablePointer<fz_document>
+    package let pointee: fz_document
     
-    public init() {
-        self.context = .init()
-//        fz_open_memory(context.underlyingPointer, <#T##data: UnsafePointer<UInt8>!##UnsafePointer<UInt8>!#>, <#T##len: Int##Int#>)
-////        fz_new_document_of_size(/*<#T##ctx: UnsafeMutablePointer<fz_context>!##UnsafeMutablePointer<fz_context>!#>*/, <#T##size: Int32##Int32#>)
-        self.underlyingPointer = .with(pointee: .init())
+    private init(_ pointer: UnsafeMutablePointer<fz_document>) {
+        self.pointee = pointer.pointee
     }
     
-    
-    
-    deinit{
-        self.underlyingPointer.deallocate()
+    public init?(stream: Stream, filename: String){
+        self = .init(fz_open_document_with_stream(Context.shared.pointer, filename, stream.pointer))
     }
+    
+//    public init(filePath: FilePath, context: Context = .init()){
+//        let stream = Stream(filePath: filePath, context: context)
+//        
+////        let stream = fz_open_file(context.underlyingPointer, filename)
+//        
+//    }
+    
+//    public init(buffer: Buffer, context: Context = .init()){
+////        fz_open_buffer(context.underlyingPointer, buffer.underlyingPointer)
+////        fz_open_fil
+//    }
+    
+//    
+//    deinit{
+//        self.underlyingPointer.deallocate()
+//    }
 }

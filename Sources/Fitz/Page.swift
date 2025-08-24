@@ -9,18 +9,19 @@ import Core
 
 extension fz_page: @retroactive @unchecked Sendable {}
 
-public struct Page: FZConvertible, ~Copyable {
-    internal typealias UnderlyingType = fz_page
+public struct Page: FZConvertible {
+    package typealias UnderlyingType = fz_page
     
-    let underlyingPointer: UnsafeMutablePointer<fz_page>
+    package let pointee: fz_page
     
-    public init() {
-        self.underlyingPointer = .with(pointee: .init())
+    public init(from pointer: UnsafeMutablePointer<fz_page>) {
+        self.pointee = pointer.pointee
     }
     
-    deinit{
-        self.underlyingPointer.deallocate()
+    public init(size: Int32, document: Document){
+        self.init(from: fz_new_page_of_size(Context.shared.pointer, size, document.pointer))
     }
+    
 }
 
 

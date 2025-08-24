@@ -6,37 +6,36 @@
 //
 
 import CMuPDF
+import System
 
-public struct Buffer {
-    typealias UnderlyingType = fz_buffer
+extension fz_buffer: @retroactive @unchecked Sendable {}
+
+public struct Buffer: FZConvertible {
+    package typealias UnderlyingType = fz_buffer
     
-    let underlyingPointer: UnsafeMutablePointer<fz_buffer>
-    let context: Context
+    package let pointee: fz_buffer
     
-    
-    init(from pointer: UnsafeMutablePointer<fz_buffer>, context: Context) {
-        self.underlyingPointer = pointer
-        self.context = context
+    init(from pointer: UnsafeMutablePointer<fz_buffer>) {
+        self.pointee = pointer.pointee
     }
     
-    init?(capacity: Int, context: Context){
-        guard let pointer = fz_new_buffer(context.underlyingPointer, capacity) else{
+    public init?(capacity: Int){
+        guard let pointer = fz_new_buffer(Context.shared.pointer, capacity) else{
             return nil
         }
-        self = .init(from: pointer, context: context)
+        self = .init(from: pointer)
     }
 
-    public init?(fileName: String, context: Context) throws {
-        guard let pointer = fz_read_file(context.underlyingPointer, fileName) else {
+    public init?(filePath: FilePath) throws {
+        guard let pointer = fz_read_file(Context.shared.pointer, filePath.withCString(\.self)) else {
             do{
-                try fz_catch(context: context.underlyingPointer)
+                try fz_catch(context: Context.shared.pointer)
             }catch{
                 throw error
             }
             return nil
         }
-        self = .init(from: pointer, context: context)
-        
+        self = .init(from: pointer)
     }
     
     

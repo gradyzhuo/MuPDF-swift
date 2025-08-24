@@ -6,32 +6,38 @@
 //
 import Foundation
 import CMuPDF
+import System
 
 extension fz_stream: @retroactive @unchecked Sendable {}
 
-public struct Stream {
-    internal typealias UnderlyingType = fz_stream
+public struct Stream: FZConvertible {
+    package typealias UnderlyingType = fz_stream
 
-    var underlyingPointer: UnsafeMutablePointer<fz_stream>
-    var context: Context
+    package let pointee: fz_stream
     
-    internal init(from pointer: UnsafeMutablePointer<fz_stream>, context: Context) {
-        self.underlyingPointer = pointer
-        self.context = context
+    internal init(from pointer: UnsafeMutablePointer<fz_stream>) {
+        self.pointee = pointer.pointee
     }
 
-    public init?(data: Data, context: Context){
-        guard let memoryPointer = fz_open_memory(context.underlyingPointer, data.withUnsafeBytes{ $0 }.baseAddress, data.count) else {
+    public init?(data: Data){
+        guard let memoryPointer = fz_open_memory(Context.shared.pointer, data.withUnsafeBytes{ $0 }.baseAddress, data.count) else {
             return nil
         }
-        self = .init(from: memoryPointer, context: context)
+        self = .init(from: memoryPointer)
     }
     
-    public func readAll(initial: Int) -> Buffer? {
-        guard let bufferPointer = fz_read_all(context.underlyingPointer, underlyingPointer, initial) else {
+    public init?(filePath: FilePath){
+        guard let pointer = fz_open_file(Context.shared.pointer, filePath.string) else {
             return nil
         }
-        return .init(from: bufferPointer, context: context)
+        self = .init(from: pointer)
+    }
+    
+    public func readAll(initial: Int = 0) -> Buffer? {
+        guard let pointer = fz_read_all(Context.shared.pointer, pointer, initial) else {
+            return nil
+        }
+        return .init(from: pointer)
     }
     
 //    public func readBest() -> Buffer?{

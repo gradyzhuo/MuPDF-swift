@@ -11,9 +11,9 @@ import Foundation
 package let logger = Logger(label: "[MuPDF]")
 
 
-package func `try`(context: Context, handler: () throws -> Void) throws {
+package func `try`(context: borrowing Context, handler: () throws -> Void) throws {
 
-    guard let buffer = fz_push_try(context.underlyingPointer) else {
+    guard let buffer = fz_push_try(context.pointer) else {
         return
     }
     
@@ -21,7 +21,7 @@ package func `try`(context: Context, handler: () throws -> Void) throws {
         return
     }
     
-    guard fz_do_try(context.underlyingPointer) > 0 else {
+    guard fz_do_try(context.pointer) > 0 else {
         return
     }
     
@@ -53,18 +53,17 @@ public struct Try {
         copiedSelf.catchHandler = handler
         return copiedSelf
     }
-    
 }
 
-public func withContext<R>(_ context: Context, try processor: @escaping () throws -> R, always: (() -> Void)? = nil ) throws -> R{
+public func withContext<R>(_ context: borrowing Context, try processor: @escaping () throws -> R, always: (() -> Void)? = nil ) throws -> R{
     
-    try fz_try(context: context.underlyingPointer)
+    try fz_try(context: context.pointer)
     
     let result = try processor()
     if let always {
-        try fz_always(context: context.underlyingPointer, handler: always)
+        try fz_always(context: context.pointer, handler: always)
     }
-    try fz_catch(context: context.underlyingPointer)
+    try fz_catch(context: context.pointer)
     
     return result
 }

@@ -8,16 +8,19 @@ import CMuPDF
 
 extension fz_context: @retroactive @unchecked Sendable {}
 
-public struct Context {
-    typealias UnderlyingType = fz_context
+public struct Context: FZConvertible{
+    package typealias UnderlyingType = fz_context
 
-    var underlyingPointer: UnsafeMutablePointer<fz_context>
+    package let pointee: fz_context
     
-    public init(store: Store = .unlimited){
-        self.underlyingPointer = fz_new_context_imp(nil, nil, store.rawValue, FZ_VERSION)
+    public static let shared: Context = Context()
+    
+    internal init(from pointer: UnsafeMutablePointer<fz_context>){
+        self.pointee = pointer.pointee
     }
     
-//    deinit{
-//        self.underlyingPointer.deallocate()
-//    }
+    package init(store: Store = .unlimited){
+        self.init(from: fz_new_context_imp(nil, nil, store.rawValue, FZ_VERSION))
+    }
 }
+
